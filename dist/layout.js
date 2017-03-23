@@ -69,6 +69,7 @@ var place = function place(flow, axis, align, bounds, size) {
 
 var El = {};
 
+/* calculates position of the parent element*/
 El.calcBounds = function (el) {
 
   if (el === _platform.window) {
@@ -210,12 +211,14 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
 
 /* TODO Document this. */
 
+/* calculates position of the body element */
 var calcRelPos = function calcRelPos(zone, masterBounds, slaveSize) {
   var _ref2;
 
   var _axes$zone$flow = axes[zone.flow],
       main = _axes$zone$flow.main,
       cross = _axes$zone$flow.cross;
+
   /* TODO: The slave is hard-coded to align cross-center with master. */
 
   var crossAlign = 'center';

@@ -17,11 +17,13 @@ var createElement = function createElement(x) {
 };
 
 var bodyAppendElement = function bodyAppendElement(x) {
-  return _platform.isClient ? document.body.appendChild(x) : _utils.noop;
+  var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.body;
+  return _platform.isClient ? parent.appendChild(x) : _utils.noop;
 };
 
 var bodyRemoveElement = function bodyRemoveElement(x) {
-  return _platform.isClient ? document.body.removeChild(x) : _utils.noop;
+  var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.body;
+  return _platform.isClient ? parent.removeChild(x) : _utils.noop;
 };
 
 var ReactLayerMixin = function ReactLayerMixin() {
@@ -33,7 +35,7 @@ var ReactLayerMixin = function ReactLayerMixin() {
     },
     componentDidMount: function componentDidMount() {
       /* Mount the mount. */
-      bodyAppendElement(this.layerContainerNode);
+      bodyAppendElement(this.layerContainerNode, this.props.parent);
       this._layerRender();
     },
     componentDidUpdate: function componentDidUpdate() {
@@ -42,7 +44,7 @@ var ReactLayerMixin = function ReactLayerMixin() {
     componentWillUnmount: function componentWillUnmount() {
       this._layerUnrender();
       /* Unmount the mount. */
-      bodyRemoveElement(this.layerContainerNode);
+      bodyRemoveElement(this.layerContainerNode, this.props.parent);
     },
     _layerRender: function _layerRender() {
       var layerReactEl = this.renderLayer();
