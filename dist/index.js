@@ -123,7 +123,7 @@ var Popover = (0, _react.createClass)({
     enterExitTransitionDurationMs: _react.PropTypes.number,
     className: _react.PropTypes.string,
     style: _react.PropTypes.object,
-    parent: _react.PropTypes.node
+    parent: _react.PropTypes.instanceOf(Element)
   },
   mixins: [(0, _reactLayerMixin2.default)()],
   getDefaultProps: function getDefaultProps() {
