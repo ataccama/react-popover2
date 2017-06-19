@@ -27,7 +27,7 @@
   "author": "Iakov Markov <iakovmarkov@gmail.com>",
   "name": "react-popover2",
   "homepage": "https://github.com/iakovmarkov/react-popover2",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "index.js",
   "description": "react-popover's successor",
   "devDependencies": {

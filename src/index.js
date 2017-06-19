@@ -385,7 +385,6 @@ const Popover = createClass({
   untrackPopover () {
     clearInterval(this.checkLayoutInterval)
     this.frameEl.removeEventListener(`scroll`, this.onFrameScroll)
-    this.props.parent && (this.bodyEl.style.display = 'none')
     resizeEvent.off(this.frameEl, this.onFrameResize)
     resizeEvent.off(this.containerEl, this.onPopoverResize)
     resizeEvent.off(this.targetEl, this.onTargetResize)

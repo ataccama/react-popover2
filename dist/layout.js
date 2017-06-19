@@ -5,8 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.equalCoords = exports.doesFitWithin = exports.centerOfBoundsFromBounds = exports.centerOfBounds = exports.centerOfSize = exports.axes = exports.pickZone = exports.place = exports.calcRelPos = exports.validTypeValues = exports.types = exports.El = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _platform = require('./platform');
 
 var _utils = require('./utils');
@@ -145,7 +143,7 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
 
   /* Order the zones by the amount of popup that would be cut out if that zone is used.
      The first one in the array is the one that cuts the least amount.
-      const area = size.w * size.h  // Popup area is constant and it does not change the order
+       const area = size.w * size.h  // Popup area is constant and it does not change the order
   */
   zones.forEach(function (z) {
     z.cutOff = /* area */-Math.max(0, Math.min(z.w, size.w)) * Math.max(0, Math.min(z.h, size.h));
@@ -161,18 +159,12 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
   /* If a place is required pick it from the available zones if possible. */
 
   if (opts.place) {
-    var _ret = function () {
-      var type = getPreferenceType(opts.place);
-      if (!type) throw createPreferenceError(opts.place);
-      var finder = function finder(z) {
-        return z[type] === opts.place;
-      };
-      return {
-        v: (0, _utils.find)(finder, availZones) || (0, _utils.find)(finder, zones)
-      };
-    }();
-
-    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+    var type = getPreferenceType(opts.place);
+    if (!type) throw createPreferenceError(opts.place);
+    var finder = function finder(z) {
+      return z[type] === opts.place;
+    };
+    return (0, _utils.find)(finder, availZones) || (0, _utils.find)(finder, zones);
   }
 
   /* If the preferred side is part of the available zones, use that otherwise
@@ -180,29 +172,21 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
   largest zone. */
 
   if (opts.preferPlace) {
-    var _ret2 = function () {
-      var preferenceType = getPreferenceType(opts.preferPlace);
-      if (!preferenceType) throw createPreferenceError(opts.preferPlace);
+    var preferenceType = getPreferenceType(opts.preferPlace);
+    if (!preferenceType) throw createPreferenceError(opts.preferPlace);
 
-      // Try to fit first in zone where the pop up fit completely
-      var preferredAvailZones = availZones.filter(function (zone) {
-        return zone[preferenceType] === opts.preferPlace;
-      });
-      if (preferredAvailZones.length) return {
-          v: preferredAvailZones[0]
-        };
+    // Try to fit first in zone where the pop up fit completely
+    var preferredAvailZones = availZones.filter(function (zone) {
+      return zone[preferenceType] === opts.preferPlace;
+    });
+    if (preferredAvailZones.length) return preferredAvailZones[0];
 
-      // If there are not areas where the pop up fit completely, it uses the preferred ones
-      // in order from the one the fit better
-      var preferredZones = zones.filter(function (zone) {
-        return zone[preferenceType] === opts.preferPlace;
-      });
-      if (!availZones.length && preferredZones.length) return {
-          v: preferredZones[0]
-        };
-    }();
-
-    if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+    // If there are not areas where the pop up fit completely, it uses the preferred ones
+    // in order from the one the fit better
+    var preferredZones = zones.filter(function (zone) {
+      return zone[preferenceType] === opts.preferPlace;
+    });
+    if (!availZones.length && preferredZones.length) return preferredZones[0];
   }
 
   // Return a zone that fit completely or the one that fit the best

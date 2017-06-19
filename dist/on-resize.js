@@ -60,24 +60,22 @@ var initialize = function initialize(el) {
       el.removeEventListener('onresize', onResize);
     };
   } else {
-    (function () {
-      if (getComputedStyle(el).position === 'static') {
-        detector.elWasStaticPosition = true;
-        el.style.position = 'relative';
-      }
-      var objEl = createElementHack();
-      objEl.onload = function () /* event */{
-        this.contentDocument.defaultView.addEventListener('resize', onResize);
-      };
-      detector.destroy = function () {
-        if (detector.elWasStaticPosition) el.style.position = '';
-        // Event handlers will be automatically removed.
-        // http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
-        el.removeChild(objEl);
-      };
+    if (getComputedStyle(el).position === 'static') {
+      detector.elWasStaticPosition = true;
+      el.style.position = 'relative';
+    }
+    var objEl = createElementHack();
+    objEl.onload = function () /* event */{
+      this.contentDocument.defaultView.addEventListener('resize', onResize);
+    };
+    detector.destroy = function () {
+      if (detector.elWasStaticPosition) el.style.position = '';
+      // Event handlers will be automatically removed.
+      // http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
+      el.removeChild(objEl);
+    };
 
-      el.appendChild(objEl);
-    })();
+    el.appendChild(objEl);
   }
 };
 
