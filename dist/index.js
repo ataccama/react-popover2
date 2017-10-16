@@ -143,7 +143,7 @@ var Popover = (0, _react.createClass)({
       standing: 'below',
       exited: !this.props.isOpen, // for animation-dependent rendering, should popover close/open?
       exiting: false, // for tracking in-progress animations
-      toggle: false // for business logic tracking, should popover close/open?
+      toggle: this.props.isOpen || false // for business logic tracking, should popover close/open?
     };
   },
   componentDidMount: function componentDidMount() {

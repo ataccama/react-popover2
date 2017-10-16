@@ -143,7 +143,7 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
 
   /* Order the zones by the amount of popup that would be cut out if that zone is used.
      The first one in the array is the one that cuts the least amount.
-       const area = size.w * size.h  // Popup area is constant and it does not change the order
+      const area = size.w * size.h  // Popup area is constant and it does not change the order
   */
   zones.forEach(function (z) {
     z.cutOff = /* area */-Math.max(0, Math.min(z.w, size.w)) * Math.max(0, Math.min(z.h, size.h));
