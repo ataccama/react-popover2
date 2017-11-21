@@ -91,7 +91,7 @@ const Popover = createClass({
   mixins: [ReactLayerMixin()],
   getDefaultProps () {
     return {
-      tipSize: 7,
+      tipSize: 6,
       preferPlace: null,
       place: null,
       offset: 4,
@@ -254,6 +254,35 @@ const Popover = createClass({
       this.containerEl.style.top = `${pos.y}px`
       this.containerEl.style.left = `${pos.x}px`
     }
+
+    /* Calculate Tip Position */
+
+    let tipCrossPos =
+      /* Get the absolute tipCrossCenter. Tip is positioned relative to containerEl
+      but it aims at targetCenter which is positioned relative to frameEl... we
+      need to cancel the containerEl positioning so as to hit our intended position. */
+      Layout.centerOfBoundsFromBounds(zone.flow, "cross", tb, pos) +
+      /* centerOfBounds does not account for scroll so we need to manually add that
+      here. */
+      scrollSize.cross -
+      /* Center tip relative to self. We do not have to calcualte half-of-tip-size since tip-size
+      specifies the length from base to tip which is half of total length already. */
+      this.props.tipSize
+
+    if (tipCrossPos < dockingEdgeBufferLength)
+      tipCrossPos = dockingEdgeBufferLength
+    else if (
+      tipCrossPos >
+      pos.crossLength - dockingEdgeBufferLength - this.props.tipSize * 2
+    ) {
+      tipCrossPos =
+        pos.crossLength - dockingEdgeBufferLength - this.props.tipSize * 2
+    }
+
+    this.tipEl.style.transform = `${flowToTipTranslations[
+      zone.flow
+    ]}(${tipCrossPos}px)`
+    this.tipEl.style[jsprefix("Transform")] = this.tipEl.style.transform
   },
   checkTargetReposition () {
     if (this.measureTargetBounds()) this.resolvePopoverLayout()
@@ -332,6 +361,7 @@ const Popover = createClass({
 
     this.containerEl = findDOMNode(this.layerReactComponent)
     this.bodyEl = this.containerEl.querySelector(`.${be(className, 'body')}`)
+    this.tipEl = this.containerEl.querySelector(`.${be(className, 'tip')}`)
 
     /* Note: frame is hardcoded to window now but we think it will
      be a nice feature in the future to allow other frames to be used
@@ -432,6 +462,7 @@ const Popover = createClass({
     return (
       E.div(popoverProps,
         E.div({ className: be(className, 'body') }, ...popoverBody),
+        E.div({ className: be(className, 'tip') }),
       )
     )
   },
